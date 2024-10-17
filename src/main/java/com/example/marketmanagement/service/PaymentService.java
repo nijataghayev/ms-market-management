@@ -17,6 +17,8 @@ import com.example.marketmanagement.model.PaymentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,6 +39,7 @@ public class PaymentService {
     private final BasketRepository basketRepository;
     private final ProductRepository productRepository;
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void processPayment(Long userId, Long cardId, Long accountId) {
         UserProfileEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(
